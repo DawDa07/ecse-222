@@ -1,3 +1,5 @@
+-- 2-1 mux
+
 ENTITY example1 IS
     PORT (x1, x2, s, :IN  BIT;
           f : OUT BIT);
