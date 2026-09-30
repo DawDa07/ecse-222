@@ -39,7 +39,7 @@ begin
 		a_in <= '1';
 		b_in <= '0';
 		wait for 1 ns;
-		assert(f_out='1') report "Fail 1/0" severity error;
+		assert(f_out='0') report "Fail 1/0" severity error;
 		
 		a_in <= '1';
 		b_in <= '1';
