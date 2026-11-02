@@ -2,71 +2,51 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity rca_structural is
-port ( A: in std_logic_vector (3 downto 0);
-       B: in std_logic_vector (3 downto 0);
-       S: out std_logic_vector (4 downto 0));
-end rca_structural;
+entity rca_structural_tb is
+-- Testbench entities do not have ports
+end rca_structural_tb;
 
-architecture structural of rca_structural is
-    -- Component declaration for Half-Adder
-    component half_adder
-        port (
-            a: in std_logic;
-            b: in std_logic;
-            s: out std_logic;
-            c: out std_logic
+architecture behavior of rca_structural_tb is
+    -- Component Declaration for the Unit Under Test (UUT)
+    component rca_structural
+    port(
+         A : in  std_logic_vector(3 downto 0);
+         B : in  std_logic_vector(3 downto 0);
+         S : out std_logic_vector(4 downto 0)
         );
     end component;
 
-    -- Component declaration for Full-Adder
-    component full_adder
-        port (
-            a: in std_logic;
-            b: in std_logic;
-            c_in: in std_logic;
-            s: out std_logic;
-            c_out: out std_logic
-        );
-    end component;
+    -- Signals to connect to UUT inputs
+    signal tb_A : std_logic_vector(3 downto 0) := (others => '0');
+    signal tb_B : std_logic_vector(3 downto 0) := (others => '0');
 
-    -- Internal carry signals between adder stages
-    signal c0, c1, c2 : std_logic;
+    -- Signals to connect to UUT outputs
+    signal tb_S : std_logic_vector(4 downto 0);
 
 begin
-    -- Bit 0: Half Adder (no initial carry-in)
-    HA0: half_adder port map (
-        a => A(0),
-        b => B(0),
-        s => S(0),
-        c => c0
-    );
+    -- Instantiate the Unit Under Test (UUT)
+    uut: rca_structural port map (
+          A => tb_A,
+          B => tb_B,
+          S => tb_S
+        );
 
-    -- Bit 1: Full Adder
-    FA1: full_adder port map (
-        a => A(1),
-        b => B(1),
-        c_in => c0,
-        s => S(1),
-        c_out => c1
-    );
+    -- Stimulus process for exhaustive testing
+    stim_proc: process
+    begin
+        -- Loop through all 16 values for A
+        for i in 0 to 15 loop
+            tb_A <= std_logic_vector(to_unsigned(i, 4));
+            
+            -- Loop through all 16 values for B
+            for j in 0 to 15 loop
+                tb_B <= std_logic_vector(to_unsigned(j, 4));
+                wait for 10 ns;
+            end loop;
+        end loop;
 
-    -- Bit 2: Full Adder
-    FA2: full_adder port map (
-        a => A(2),
-        b => B(2),
-        c_in => c1,
-        s => S(2),
-        c_out => c2
-    );
+        -- Terminate simulation
+        wait;
+    end process;
 
-    -- Bit 3: Full Adder
-    FA3: full_adder port map (
-        a => A(3),
-        b => B(3),
-        c_in => c2,
-        s => S(3),
-        c_out => S(4) -- Final carry-out maps to S(4)
-    );
-
-end structural;
+end behavior;
