@@ -14,7 +14,7 @@ architecture behavioral of bcd_adder_behavioral is
     signal adjust   : std_logic;
     signal sum_final: unsigned(4 downto 0);
 begin
-    -- Initial binary addition (resized to 5 bits)
+    -- Initial binary addition 
     sum_temp <= resize(unsigned(A), 5) + resize(unsigned(B), 5);
     
     -- Conditional signal assignment for carry/adjust flag
@@ -23,7 +23,6 @@ begin
     -- Conditional signal assignment to add 6 (00110 in binary) if needed
     sum_final <= sum_temp + "00110" when (adjust = '1') else sum_temp;
     
-    -- Map final adjusted sum and carry to outputs
     S <= std_logic_vector(sum_final(3 downto 0));
     C <= adjust;
 end behavioral;

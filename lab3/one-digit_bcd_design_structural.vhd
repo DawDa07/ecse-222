@@ -9,21 +9,20 @@ port ( A: in std_logic_vector (3 downto 0);
        C: out std_logic);
 end bcd_adder_structural;
 
-architecture behavioral of bcd_adder_structural is
+architecture structural of bcd_adder_structural is
     signal sum_temp : unsigned(4 downto 0);
     signal adjust   : std_logic;
     signal sum_final: unsigned(4 downto 0);
 begin
-    -- Initial binary addition (resized to 5 bits to capture initial carry)
+    -- Initial binary addition
     sum_temp <= resize(unsigned(A), 5) + resize(unsigned(B), 5);
     
-    -- Determine if BCD adjustment is needed (sum > 9)
-    adjust <= '1' when (sum_temp > 9) else '0';
+    -- Boolean logic for BCD carry-out (Sum > 9)
+    adjust <= sum_temp(4) or (sum_temp(3) and sum_temp(2)) or (sum_temp(3) and sum_temp(1));
     
-    -- Add 6 (00110 in binary) if adjustment is required, otherwise add 0
+    -- Add 6 if adjustment is required
     sum_final <= sum_temp + "00110" when (adjust = '1') else sum_temp;
     
-    -- Map final adjusted sum to outputs
     S <= std_logic_vector(sum_final(3 downto 0));
     C <= adjust;
-end behavioral;
+end structural;
