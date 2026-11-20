@@ -1,0 +1,9 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+entity firstname_lastname_wrapper is 
+Port ( A, B : in std_logic_vector (3 down to 0);
+decoded_A : out std_logic_vecotr (6 downto 0);
+decoded_B : out std_logic_vecotr (6 downto 0);
+decoded_AplusB : out std_logic_vecotr (13 downto 0);
+end Daw_Da_wrapper;
